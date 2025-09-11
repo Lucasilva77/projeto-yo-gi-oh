@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import b1 from "../assets/banner1.jpg";
+import b2 from "../assets/banner2.jpg";
+import b3 from "../assets/banner3.jpg";
 import "./Banner.css";
 
 export default function Banner({
-  images = ["/banner1.jpg", "/banner2.jpg", "/banner3.jpg"],
+  images = [b1, b2, b3],
   intervalMs = 8000,
 }) {
   const [index, setIndex] = useState(0);
@@ -27,12 +30,13 @@ export default function Banner({
         ))}
       </div>
 
-      {/* Bolinhas */}
+      {/* Bolinhas clicáveis */}
       <div className="banner-indicators">
         {images.map((_, i) => (
           <span
             key={i}
             className={`indicator ${i === index ? "active" : ""}`}
+            onClick={() => setIndex(i)} // 👈 clicou, troca o banner
           />
         ))}
       </div>

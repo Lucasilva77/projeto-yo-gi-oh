@@ -1,110 +1,116 @@
 import "./App.css";
-import logo from "./assets/logo.png";
 import abacaxi from "./assets/abacaxi.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import CardGrid from "./components/CardGrid";
+import Banner from "./components/Banner";
 
 export default function App() {
-  // Mock de produtos (12 cartas)
-  const produtos = [...Array(40)].map((_, i) => ({
-    id: i + 1,
-    nome: `Carta ${i + 1}`,
-    preco: "R$ 24,99",
-    img: "https://via.placeholder.com/200x280",
-  }));
+  const [cards, setCards] = useState([]);
+  const [allCards, setAllCards] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Estado para paginação
-  const [itensPorPagina, setItensPorPagina] = useState(12);
-  const [paginaAtual, setPaginaAtual] = useState(1);
+  // filtros
+  const [selectedRaces, setSelectedRaces] = useState([]);
+  const [selectedTypes, setSelectedTypes] = useState([]);
 
-  const totalPaginas = Math.ceil(produtos.length / itensPorPagina);
+  // tema
+  const [theme, setTheme] = useState("light");
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
-  // Produtos exibidos na página atual
-  const inicio = (paginaAtual - 1) * itensPorPagina;
-  const fim = inicio + itensPorPagina;
-  const exibidos = produtos.slice(inicio, fim);
+  // alternar checkboxes
+  const toggleRace = (race) => {
+    setSelectedRaces((prev) =>
+      prev.includes(race) ? prev.filter((r) => r !== race) : [...prev, race]
+    );
+  };
+
+  const toggleType = (type) => {
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
+  };
+
+  // buscar cartas
+  const fetchCards = async () => {
+    setLoading(true);
+    try {
+      const url =
+        "https://db.ygoprodeck.com/api/v7/cardinfo.php?num=300&offset=0";
+      const res = await axios.get(url);
+      setAllCards(res.data.data);
+      setCards(res.data.data.slice(0, 40));
+    } catch (err) {
+      console.error("Erro ao buscar cartas:", err);
+      setCards([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // aplicar filtros no front
+  const applyFilters = () => {
+    let filtered = [...allCards];
+
+    if (search) {
+      filtered = filtered.filter((card) =>
+        card.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
+    if (selectedRaces.length > 0) {
+      filtered = filtered.filter((card) => selectedRaces.includes(card.race));
+    }
+
+    if (selectedTypes.length > 0) {
+      filtered = filtered.filter((card) => selectedTypes.includes(card.type));
+    }
+
+    setCards(filtered.slice(0, 40));
+  };
+
+  useEffect(() => {
+    fetchCards();
+  }, []);
+
   return (
-    <div className="app">
-      {/* Header */}
-      <header className="header">
-        {/* Logo */}
-        <div className="logo-container">
-          <img src={logo} alt="FPR Logo" className="logo-img" />
-        </div>
-
-        {/* Barra de busca */}
-        <div className="search-bar">
-          <input type="text" placeholder="Pesquisar" />
-          <button>🔍</button>
-        </div>
- 
-        {/* Carrinho */}
-        <button className="cart">🛒</button>
-      </header>
+    <div className={`app ${theme}`}>
+      <Header
+        search={search}
+        setSearch={setSearch}
+        onSearch={applyFilters}
+        onToggleTheme={toggleTheme}
+        theme={theme}
+      />
 
       <div className="content">
-        {/* Sidebar */}
-       <aside className="sidebar">
-  <h2 className="sidebar-title">FILTROS</h2>
+        <Sidebar
+          selectedRaces={selectedRaces}
+          toggleRace={toggleRace}
+          selectedTypes={selectedTypes}
+          toggleType={toggleType}
+          onSearch={applyFilters}
+          onClear={() => {
+            setSelectedRaces([]);
+            setSelectedTypes([]);
+            setSearch("");
+            setCards(allCards.slice(0, 40));
+          }}
+        />
 
-  <div className="filter-section">
-    <h3 className="filter-subtitle">TIPO / ATRIBUTO</h3>
-    <div className="filter-list">
-      {[
-        "Aqua", "Beast", "Beast Warrior", "Continuos", "Counter", "Creator God",
-        "Cyberse", "Dark", "Dinosaur", "Divine Beast", "Divino", "Dragon", "Earth",
-        "Effect", "Equip", "Fairy", "Field", "Friend", "Fire", "Fish", "Flip",
-        "Fusion", "Insect", "Light", "Link", "Machine", "Monster", "N/A", "Normal",
-        "Pendulum", "Plant", "Psichic", "Pyro", "Quick-Play", "Reptile"
-      ].map((attr) => (
-        <label key={attr}>
-          <input type="checkbox" /> {attr}
-        </label>
-      ))}
-    </div>
-  </div>
-
-  <div className="filter-section">
-    <h3 className="filter-subtitle">TIPO CARTA</h3>
-    <div className="filter-list">
-      {["Armadilha", "Counter", "Mágica", "Monstro", "Skill Card", "Token"].map(
-        (tipo) => (
-          <label key={tipo}>
-            <input type="checkbox" /> {tipo}
-          </label>
-        )
-      )}
-    </div>
-  </div>
-
-  <div className="buttons">
-    <button className="btn-search">PESQUISAR</button>
-    <button className="btn-clear">LIMPAR FILTROS</button>
-  </div>
-</aside>
-
-
-        {/* Conteúdo */}
         <main className="main">
-          {/* Banner */}
-          <div className="banner">
-            <img src="https://via.placeholder.com/900x200" alt="Banner" />
-          </div>
+          {/* Banner rotativo */}
+          <Banner />
 
-          {/* Grade de cards */}
-          <div className="cards">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="card">
-                <img src="https://via.placeholder.com/200x280" alt="Card" />
-                <p className="title">Artnage Finnel</p>
-                <p className="price">R$ 24,99</p>
-                <button className="btn-buy">COMPRAR</button>
-              </div>
-            ))}
-          </div>
+          <CardGrid cards={cards} loading={loading} />
         </main>
       </div>
 
-      {/* Footer */}
       <footer className="footer">
         <div className="footer-content">
           © 2023 FPR Animes - Todos os direitos reservados.
