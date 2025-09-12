@@ -13,9 +13,26 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // carrinho
+  const [cart, setCart] = useState([]);
+
+  // função pra adicionar carta ao carrinho
+  const addToCart = (card) => {
+    setCart((prev) => [...prev, card]);
+  };
+
+  // função pra remover do carrinho
+  const removeFromCart = (id) => {
+    setCart((prev) => prev.filter((c) => c.id !== id));
+  };
+
   // filtros
   const [selectedRaces, setSelectedRaces] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
+
+  // paginação
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // tema
   const [theme, setTheme] = useState("light");
@@ -44,10 +61,9 @@ export default function App() {
         "https://db.ygoprodeck.com/api/v7/cardinfo.php?num=300&offset=0";
       const res = await axios.get(url);
       setAllCards(res.data.data);
-      setCards(res.data.data.slice(0, 40));
     } catch (err) {
       console.error("Erro ao buscar cartas:", err);
-      setCards([]);
+      setAllCards([]);
     } finally {
       setLoading(false);
     }
@@ -71,8 +87,11 @@ export default function App() {
       filtered = filtered.filter((card) => selectedTypes.includes(card.type));
     }
 
-    setCards(filtered.slice(0, 40));
+    return filtered;
   };
+
+  const filteredCards = applyFilters();
+  const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
 
   useEffect(() => {
     fetchCards();
@@ -99,7 +118,6 @@ export default function App() {
             setSelectedRaces([]);
             setSelectedTypes([]);
             setSearch("");
-            setCards(allCards.slice(0, 40));
           }}
         />
 
@@ -107,7 +125,84 @@ export default function App() {
           {/* Banner rotativo */}
           <Banner />
 
-          <CardGrid cards={cards} loading={loading} />
+          {/* Controles embaixo do banner */}
+          <div className="controls">
+            {/* Dropdown itens por página */}
+            <div className="items-per-page">
+              <select
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={30}>30</option>
+              </select>
+              <span>itens por página</span>
+            </div>
+
+            {/* Paginação */}
+            <div className="pagination">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                &lt;
+              </button>
+
+              {(() => {
+                const totalPages = Math.ceil(
+                  filteredCards.length / itemsPerPage
+                );
+                let start = Math.max(1, currentPage - 2);
+                let end = start + 4;
+                if (end > totalPages) {
+                  end = totalPages;
+                  start = Math.max(1, end - 4);
+                }
+
+                return [...Array(end - start + 1)].map((_, i) => {
+                  const page = start + i;
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={page === currentPage ? "active" : ""}
+                    >
+                      {page}
+                    </button>
+                  );
+                });
+              })()}
+
+              <button
+                onClick={() =>
+                  setCurrentPage((p) =>
+                    Math.min(
+                      p + 1,
+                      Math.ceil(filteredCards.length / itemsPerPage)
+                    )
+                  )
+                }
+                disabled={
+                  currentPage === Math.ceil(filteredCards.length / itemsPerPage)
+                }
+              >
+                &gt;
+              </button>
+            </div>
+          </div>
+
+          {/* Grid de cards separado */}
+          <CardGrid
+            cards={filteredCards.slice(
+              (currentPage - 1) * itemsPerPage,
+              currentPage * itemsPerPage
+            )}
+            loading={loading}
+          />
         </main>
       </div>
 

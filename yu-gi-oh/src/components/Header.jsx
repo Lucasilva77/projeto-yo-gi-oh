@@ -14,7 +14,7 @@ export default function Header({
       <div className="logo-container">
         <img src={logo} alt="FPR Logo" className="logo-img h-12" />
       </div>
-
+      
       {/* Barra de pesquisa */}
       <div className="search-bar relative w-80">
         <input
@@ -22,17 +22,16 @@ export default function Header({
           placeholder="Pesquisar"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full px-4 py-2 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+          className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <button
           onClick={onSearch}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 hover:text-green-800"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 hover:text-green-800"
         >
-          {/* Ícone SVG personalizado */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="18"
+            height="18"
             fill="currentColor"
             viewBox="0 0 24 24"
           >

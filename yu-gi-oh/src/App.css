@@ -23,7 +23,7 @@
    HEADER
 =========================== */
 .header {
-  background: #111809;
+  background: #131A0A;
   color: #fff;
   display: flex;
   align-items: center;
@@ -71,46 +71,59 @@
   border-right: 1px solid #ddd;
 }
 
+
 .sidebar-title {
   margin-bottom: 10px;
   font-size: 18px;
   font-weight: bold;
+  color:#34AC40 ;
 }
 
 .sidebar h3 {
   margin: 10px 0 5px;
   font-size: 14px;
+  color:#F46D1B ;
 }
 
 .sidebar label {
   display: block;
   margin-bottom: 5px;
   font-size: 14px;
+  color: #666666;
+
 }
 
 .buttons {
-  margin-top: 15px;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.btn-search,
-.btn-clear {
-  padding: 8px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  justify-content: space-between; /* espaço entre os botões */
+  margin-top: 15px;
+  gap: 10px; /* espaçamento entre eles */
 }
 
 .btn-search {
-  background: #34AC40;
-  color:#fff;
+  flex: 1;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  padding:  5px; /* aumenta altura e largura */
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px; /* controla o tamanho da fonte */
+  border-radius: 1px; /* opcional: cantos arredondados */
 }
 
 .btn-clear {
-  background: #F46D1B;
+  flex: 1;
+  background: #e67e22;
+  color: #fff;
+  border: none;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 4px;
 }
+
 
 /* ===========================
    MAIN CONTENT
@@ -121,11 +134,12 @@
 }
 
 .banner img {
-  width: 100%;
-  max-height: 200px;
+  width: 1,360px;
+  height: 350px;
+  max-height: 1000px;
   object-fit: cover;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 100px;
 }
 
 /* ===========================
@@ -243,4 +257,183 @@
 
 .app.dark .footer {
   background: #222;
+}
+/* ===========================
+   RESPONSIVIDADE
+=========================== */
+
+/*  Mobile até 768px */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  /* Sidebar vira menu oculto */
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100vh;
+    background: #ffffff;
+    color: #fff;
+    z-index: 8000;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .sidebar.active {
+    display: block;
+  }
+
+  /* Cards em 2 colunas */
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Banner ocupa toda a largura */
+  .banner img {
+    max-height: 150px;
+  }
+
+  /* Footer centralizado */
+  .footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+}
+
+/* Desktop 1366px */
+@media (min-width: 1024px) and (max-width: 1600px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .sidebar {
+    width: 240px;
+  }
+
+  .banner img {
+    max-height: 220px;
+  }
+}
+
+/*  Desktop 1920px */
+@media (min-width: 1601px) {
+  .cards {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .sidebar {
+    width: 300px;
+  }
+
+  .banner img {
+    max-height: 280px;
+  }
+
+  .card-img {
+    height: 300px;
+  }
+
+  .footer {
+    font-size: 1.1rem;
+  }
+}
+
+/* Bloco de controles abaixo do banner */
+.controls {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  margin: 15px 0 20px 0; 
+}
+
+.items-per-page {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* espaço entre select e texto */
+  justify-content: flex-end; /* joga pro canto direito */
+  margin: 10px 0;
+}
+
+.items-per-page span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666666; 
+}
+
+.pagination {
+  display: flex;
+  gap: 6px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.pagination button:hover {
+  background: #f1f1f1;
+}
+
+.pagination button.active {
+  background: #34AC40;
+  color: #fff;
+  font-weight: bold;
+  border: 1px solid #34AC40;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-right: none;      /* tira a borda da direita */
+  border-radius: 4px 0 0 4px; /* arredonda só a esquerda */
+  outline: none;
+}
+
+.search-bar button {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-left: none;       /* tira a borda da esquerda */
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0; /* arredonda só a direita */
+}
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-right: none;      /* tira a borda da direita */
+  border-radius: 4px 0 0 4px; /* arredonda só a esquerda */
+  outline: none;
+}
+
+.search-bar button {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-left: none;       /* tira a borda da esquerda */
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0; /* arredonda só a direita */
 }
