@@ -1,0 +1,107 @@
+/* SIDEBAR FIXA */
+.sidebar {
+  width: 316px;
+  flex-shrink: 0;
+  height: calc(100vh - 160px);
+  background: #ffffff;
+  padding: 30px 20px;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.filter-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #34AC40;
+  margin-bottom: 10px;
+}
+
+.filters-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tipo-atributo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.tipo-atributo .filter-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 5px;
+  line-height: 1.5;
+}
+
+/* Scroll quadrado */
+.tipo-atributo .filter-list::-webkit-scrollbar {
+  width: 8px;
+}
+.tipo-atributo .filter-list::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 0;
+}
+.tipo-atributo .filter-list::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+.tipo-atributo .filter-list::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 0;
+}
+/* Firefox */
+.tipo-atributo .filter-list {
+  scrollbar-width: auto;
+  scrollbar-color: #bfbfbf #f0f0f0;
+}
+
+.filter-subtitle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #F46D1B;
+  margin-bottom: 5px;
+}
+
+.filter-list label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #444;
+}
+
+.sidebar-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-search {
+  flex: 1;
+  height: 43px;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.btn-clear {
+  flex: 1;
+  height: 43px;
+  background: #F46D1B;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  white-space: nowrap;
+}

@@ -6,6 +6,15 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import CardGrid from "./components/CardGrid";
 import Banner from "./components/Banner";
+import "./styles/reset.css";
+import "./styles/layout.css";
+import "./styles/header.css";
+import "./styles/sidebar.css";
+import "./styles/main.css";
+import "./styles/cards.css";
+import "./styles/footer.css";
+import "./styles/pagination.css";
+import "./styles/responsive.css";
 
 export default function App() {
   const [cards, setCards] = useState([]);

@@ -1,0 +1,77 @@
+/* RESPONSIVIDADE */
+
+/* Mobile até 768px */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 8000;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .sidebar.active {
+    display: block;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .banner img {
+    max-height: 150px;
+  }
+
+  .footer {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+}
+
+/* Desktop 1366px */
+@media (max-width: 1366px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .sidebar {
+    width: 280px;
+  }
+
+  .banner img {
+    max-height: 220px;
+  }
+}
+
+/* Desktop 1920px */
+@media (min-width: 1601px) {
+  .cards {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .sidebar {
+    width: 316px;
+  }
+
+  .banner img {
+    max-height: 280px;
+  }
+
+  .card-img {
+    height: 300px;
+  }
+
+  .footer {
+    font-size: 1.1rem;
+  }
+}
