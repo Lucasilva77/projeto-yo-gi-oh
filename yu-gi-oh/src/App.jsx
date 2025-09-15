@@ -14,9 +14,10 @@ import "./styles/cards.css";
 import "./styles/footer.css";
 import "./styles/pagination.css";
 import "./styles/responsive.css";
+import "./styles/Banner.css";
 
 export default function App() {
-  const [cards, setCards] = useState([]);
+  const [offset, setOffset] = useState(0);
   const [allCards, setAllCards] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,49 +25,38 @@ export default function App() {
   // carrinho
   const [cart, setCart] = useState([]);
 
-  // função pra adicionar carta ao carrinho
-  const addToCart = (card) => {
-    setCart((prev) => [...prev, card]);
-  };
-
-  // função pra remover do carrinho
-  const removeFromCart = (id) => {
+  const addToCart = (card) => setCart((prev) => [...prev, card]);
+  const removeFromCart = (id) =>
     setCart((prev) => prev.filter((c) => c.id !== id));
-  };
 
   // filtros
   const [selectedRaces, setSelectedRaces] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
 
-  // paginação
+  // paginação (front)
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
   // tema
   const [theme, setTheme] = useState("light");
-  const toggleTheme = () => {
+  const toggleTheme = () =>
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
 
-  // alternar checkboxes
-  const toggleRace = (race) => {
+  const toggleRace = (race) =>
     setSelectedRaces((prev) =>
       prev.includes(race) ? prev.filter((r) => r !== race) : [...prev, race]
     );
-  };
 
-  const toggleType = (type) => {
+  const toggleType = (type) =>
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
-  };
 
   // buscar cartas
   const fetchCards = async () => {
     setLoading(true);
     try {
-      const url =
-        "https://db.ygoprodeck.com/api/v7/cardinfo.php?num=300&offset=0";
+      const url = `https://db.ygoprodeck.com/api/v7/cardinfo.php?attribute=water&type=Link%20Monster&num=10&offset=${offset}`;
       const res = await axios.get(url);
       setAllCards(res.data.data);
     } catch (err) {
@@ -76,6 +66,11 @@ export default function App() {
       setLoading(false);
     }
   };
+
+  // sempre buscar quando offset mudar
+  useEffect(() => {
+    fetchCards();
+  }, [offset]);
 
   // aplicar filtros no front
   const applyFilters = () => {
@@ -101,10 +96,6 @@ export default function App() {
   const filteredCards = applyFilters();
   const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
 
-  useEffect(() => {
-    fetchCards();
-  }, []);
-
   return (
     <div className={`app ${theme}`}>
       <Header
@@ -121,7 +112,7 @@ export default function App() {
           toggleRace={toggleRace}
           selectedTypes={selectedTypes}
           toggleType={toggleType}
-          onSearch={applyFilters} 
+          onSearch={applyFilters}
           onClear={() => {
             setSelectedRaces([]);
             setSelectedTypes([]);
@@ -136,7 +127,6 @@ export default function App() {
 
           {/* Controles embaixo do banner */}
           <div className="controls">
-            {/* Dropdown itens por página */}
             <div className="items-per-page">
               <select
                 value={itemsPerPage}
@@ -152,65 +142,25 @@ export default function App() {
               <span>itens por página</span>
             </div>
 
-            {/* Paginação */}
             <div className="pagination">
               <button
-                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                disabled={currentPage === 1}
+                onClick={() => setOffset((o) => Math.max(o - 10, 0))}
+                disabled={offset === 0}
               >
                 &lt;
               </button>
-
-              {(() => {
-                const totalPages = Math.ceil(
-                  filteredCards.length / itemsPerPage
-                );
-                let start = Math.max(1, currentPage - 2);
-                let end = start + 4;
-                if (end > totalPages) {
-                  end = totalPages;
-                  start = Math.max(1, end - 4);
-                }
-
-                return [...Array(end - start + 1)].map((_, i) => {
-                  const page = start + i;
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={page === currentPage ? "active" : ""}
-                    >
-                      {page}
-                    </button>
-                  );
-                });
-              })()}
-
-              <button
-                onClick={() =>
-                  setCurrentPage((p) =>
-                    Math.min(
-                      p + 1,
-                      Math.ceil(filteredCards.length / itemsPerPage)
-                    )
-                  )
-                }
-                disabled={
-                  currentPage === Math.ceil(filteredCards.length / itemsPerPage)
-                }
-              >
-                &gt;
-              </button>
+              <button onClick={() => setOffset((o) => o + 10)}>&gt;</button>
             </div>
           </div>
 
-          {/* Grid de cards separado */}
+          {/* Grid de cards */}
           <CardGrid
             cards={filteredCards.slice(
               (currentPage - 1) * itemsPerPage,
               currentPage * itemsPerPage
             )}
             loading={loading}
+            addToCart={addToCart}
           />
         </main>
       </div>

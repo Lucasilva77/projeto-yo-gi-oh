@@ -70,11 +70,11 @@
 /* ===== Botões ===== */
 .filter-buttons {
   display: flex;
+  flex-direction: row; /* garante que é lado a lado */
   justify-content: space-between;
-  margin-top: 15px;
+  align-items: center;
   gap: 10px;
 }
-
 .filter-buttons button {
   flex: 1;
   background: #16a34a;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import b1 from "../assets/banner1.jpg";
 import b2 from "../assets/banner2.jpg";
 import b3 from "../assets/banner3.jpg";
-import "./Banner.css";
+
 
 export default function Banner({
   images = [b1, b2, b3],

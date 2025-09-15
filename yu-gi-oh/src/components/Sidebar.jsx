@@ -12,15 +12,42 @@ export default function Sidebar({
 
   // Lista de opções
   const races = [
-    "Aqua", "Beast", "Beast Warrior", "Continuous", "Counter", "Creator God",
-    "Cyberse", "Dark", "Dinosaur", "Divine Beast", "Dragon", "Earth",
-    "Effect", "Fairy", "Fiend", "Fish", "Insect", "Machine", "Plant", "Pyro",
-    "Reptile", "Rock", "Spellcaster", "Thunder", "Warrior", "Winged Beast",
-    "Zombie"
+    "Aqua",
+    "Beast",
+    "Beast Warrior",
+    "Continuous",
+    "Counter",
+    "Creator God",
+    "Cyberse",
+    "Dark",
+    "Dinosaur",
+    "Divine Beast",
+    "Dragon",
+    "Earth",
+    "Effect",
+    "Fairy",
+    "Fiend",
+    "Fish",
+    "Insect",
+    "Machine",
+    "Plant",
+    "Pyro",
+    "Reptile",
+    "Rock",
+    "Spellcaster",
+    "Thunder",
+    "Warrior",
+    "Winged Beast",
+    "Zombie",
   ];
 
   const types = [
-    "Armadilha", "Counter", "Mágica", "Monstro", "Skill Card", "Token"
+    "Armadilha",
+    "Counter",
+    "Mágica",
+    "Monstro",
+    "Skill Card",
+    "Token",
   ];
 
   return (
@@ -69,8 +96,12 @@ export default function Sidebar({
 
         {/* Botões */}
         <div className="filter-buttons">
-          <button onClick={onSearch}>PESQUISAR</button>
-          <button onClick={onClear}>LIMPAR FILTROS</button>
+          <button type="button" onClick={onSearch}>
+            Pesquisar
+          </button>
+          <button type="button" onClick={onClear}>
+            Limpar Filtros
+          </button>
         </div>
       </div>
     </>
