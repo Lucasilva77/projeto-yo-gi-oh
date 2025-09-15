@@ -1,4 +1,30 @@
-/* HOME / LAYOUT BASE */
+
+/* layout.css */
+
+.content {
+  display: flex;
+  flex-direction: row;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+/* Sidebar fixo no desktop */
+.sidebar {
+  width: 316px;
+  min-height: 100vh;
+  background: #fff; /* fundo branco */
+  border-right: 1px solid #ddd;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+}
+
+/* Main ocupa o resto da tela */
+.main {
+  flex: 1;
+  padding: 20px;
+  background: var(--bg-color, #f9f9f9);
+}
 .home {
   display: flex;
   background: #fff;

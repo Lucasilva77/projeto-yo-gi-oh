@@ -1,4 +1,5 @@
-// src/components/Sidebar.jsx
+import { useState } from "react";
+
 export default function Sidebar({
   selectedRaces,
   toggleRace,
@@ -7,52 +8,35 @@ export default function Sidebar({
   onSearch,
   onClear,
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Lista de opções
   const races = [
-    "Aqua",
-    "Beast",
-    "Beast Warrior",
-    "Cyberse",
-    "Dinosaur",
-    "Divine-Beast",
-    "Dragon",
-    "Fairy",
-    "Fiend",
-    "Fish",
-    "Insect",
-    "Machine",
-    "Plant",
-    "Pyro",
-    "Reptile",
-    "Rock",
-    "Sea Serpent",
-    "Spellcaster",
-    "Thunder",
-    "Warrior",
-    "Winged Beast",
-    "Zombie",
+    "Aqua", "Beast", "Beast Warrior", "Continuous", "Counter", "Creator God",
+    "Cyberse", "Dark", "Dinosaur", "Divine Beast", "Dragon", "Earth",
+    "Effect", "Fairy", "Fiend", "Fish", "Insect", "Machine", "Plant", "Pyro",
+    "Reptile", "Rock", "Spellcaster", "Thunder", "Warrior", "Winged Beast",
+    "Zombie"
   ];
 
   const types = [
-    "Normal Monster",
-    "Effect Monster",
-    "Fusion Monster",
-    "Ritual Monster",
-    "Synchro Monster",
-    "Xyz Monster",
-    "Link Monster",
-    "Spell Card",
-    "Trap Card",
+    "Armadilha", "Counter", "Mágica", "Monstro", "Skill Card", "Token"
   ];
 
   return (
-    <div className="sidebar">
-      <h3 className="filter-title">FILTROS</h3>
+    <>
+      {/* Botão mobile */}
+      <button className="filters-toggle" onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? "Fechar Filtros" : "Abrir Filtros"}
+      </button>
 
-      <div className="filters-container">
-        {/* TIPOS / ATRIBUTOS */}
-        <div className="tipo-atributo">
-          <h4 className="filter-subtitle">TIPO / ATRIBUTO</h4>
-          <div className="filter-list">
+      <div className={`filters ${isOpen ? "open" : ""}`}>
+        <h2 className="titulo_filter">FILTROS</h2>
+
+        {/* Filtros TIPO / ATRIBUTO */}
+        <div className="filters_tipo">
+          <h3>TIPO / ATRIBUTO</h3>
+          <div>
             {races.map((race) => (
               <label key={race}>
                 <input
@@ -66,10 +50,10 @@ export default function Sidebar({
           </div>
         </div>
 
-        {/* TIPOS DE CARTA */}
-        <div className="tipo-atributo">
-          <h4 className="filter-subtitle">TIPO CARTA</h4>
-          <div className="filter-list">
+        {/* Filtros TIPO CARTA */}
+        <div className="filters_tipo">
+          <h3>TIPO CARTA</h3>
+          <div>
             {types.map((type) => (
               <label key={type}>
                 <input
@@ -82,17 +66,13 @@ export default function Sidebar({
             ))}
           </div>
         </div>
-      </div>
 
-      {/* BOTÕES FIXOS NO RODAPÉ */}
-      <div className="sidebar-buttons">
-        <button className="btn-search" onClick={onSearch}>
-          PESQUISAR
-        </button>
-        <button className="btn-clear" onClick={onClear}>
-          LIMPAR FILTROS
-        </button>
+        {/* Botões */}
+        <div className="filter-buttons">
+          <button onClick={onSearch}>PESQUISAR</button>
+          <button onClick={onClear}>LIMPAR FILTROS</button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

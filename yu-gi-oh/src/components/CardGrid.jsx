@@ -1,4 +1,4 @@
-export default function CardGrid({ cards, loading }) {
+export default function CardGrid({ cards, loading, addToCart }) {
   if (loading) return <p>Carregando cartas...</p>;
   if (!cards || cards.length === 0) return <p>Nenhuma carta encontrada.</p>;
 
@@ -6,7 +6,7 @@ export default function CardGrid({ cards, loading }) {
   const taxaExtra = 15; // valor fixo em reais
 
   return (
-    <div className="cards">
+    <div className="card-grid">
       {cards.map((card) => {
         const basePrice =
           Number(card.card_prices[0].tcgplayer_price) * usdToBrl;
@@ -22,15 +22,12 @@ export default function CardGrid({ cards, loading }) {
             <p className="title">{card.name}</p>
 
             {card.card_prices && card.card_prices.length > 0 && (
-              <div className="prices">
-                <p className="price">
-                  <strong>Preço:</strong>{" "}
-                  {finalPrice.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </p>
-              </div>
+              <p className="price">
+                {finalPrice.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
             )}
 
             <button className="btn-buy" onClick={() => addToCart(card)}>

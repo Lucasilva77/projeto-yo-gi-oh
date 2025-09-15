@@ -1,107 +1,102 @@
-/* SIDEBAR FIXA */
-.sidebar {
+.filters {
   width: 316px;
-  flex-shrink: 0;
-  height: calc(100vh - 160px);
-  background: #ffffff;
-  padding: 30px 20px;
-  border-right: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  padding: 3%;
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  margin-bottom: 10%;
 }
 
-.filter-title {
-  font-size: 18px;
-  font-weight: bold;
+.titulo_filter {
   color: #34AC40;
-  margin-bottom: 10px;
+  border-bottom: 2px solid #34AC40;
+  font-weight: 700;
+  font-size: 26px;
+  margin-bottom: 15px;
 }
 
-.filters-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.tipo-atributo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid #ddd;
+.filters_tipo {
+  border-bottom: 2px solid #f97316;
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
 
-.tipo-atributo .filter-list {
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 5px;
-  line-height: 1.5;
+.filters h3 {
+  color: #f97316;
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 20px;
 }
 
-/* Scroll quadrado */
-.tipo-atributo .filter-list::-webkit-scrollbar {
-  width: 8px;
-}
-.tipo-atributo .filter-list::-webkit-scrollbar-thumb {
-  background-color: #bfbfbf;
-  border-radius: 0;
-}
-.tipo-atributo .filter-list::-webkit-scrollbar-thumb:hover {
-  background-color: #999;
-}
-.tipo-atributo .filter-list::-webkit-scrollbar-track {
-  background: #f0f0f0;
-  border-radius: 0;
-}
-/* Firefox */
-.tipo-atributo .filter-list {
-  scrollbar-width: auto;
-  scrollbar-color: #bfbfbf #f0f0f0;
+/* ===== Checkboxes ===== */
+.filters input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 2px solid #f97316;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+  border-radius: 2px;
 }
 
-.filter-subtitle {
+.filters input[type="checkbox"]:checked {
+  background-color: #fff;
+  border-color: #34AC40;
+}
+
+.filters input[type="checkbox"]:checked::after {
+  content: "✔";
+  color: #34AC40;
   font-size: 14px;
-  font-weight: bold;
-  color: #F46D1B;
-  margin-bottom: 5px;
+  position: absolute;
+  top: -2px;
+  left: 2px;
 }
 
-.filter-list label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  color: #444;
+/* ===== Texto ao lado dos checkboxes ===== */
+.filters label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: #333; /* deixa o texto visível */
+  cursor: pointer;
 }
 
-.sidebar-buttons {
+/* ===== Botões ===== */
+.filter-buttons {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
   margin-top: 15px;
+  gap: 10px;
 }
 
-.btn-search {
+.filter-buttons button {
   flex: 1;
-  height: 43px;
-  background: #27ae60;
-  color: #fff;
+  background: #16a34a;
+  color: white;
   border: none;
+  padding: 12px 10px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
+  font-size: 15px;
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  border-radius: 4px;
+  transition: 0.2s;
 }
 
-.btn-clear {
-  flex: 1;
-  height: 43px;
-  background: #F46D1B;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 14px;
-  white-space: nowrap;
+.filter-buttons button:hover {
+  background: #34AC40;
+}
+
+.filter-buttons button:last-child {
+  background: #f97316;
+}
+
+.filter-buttons button:last-child:hover {
+  background: #fb923c;
 }

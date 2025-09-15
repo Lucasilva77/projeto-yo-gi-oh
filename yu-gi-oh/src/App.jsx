@@ -1,4 +1,3 @@
-import "./App.css";
 import abacaxi from "./assets/abacaxi.png";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -122,11 +121,12 @@ export default function App() {
           toggleRace={toggleRace}
           selectedTypes={selectedTypes}
           toggleType={toggleType}
-          onSearch={applyFilters}
+          onSearch={applyFilters} 
           onClear={() => {
             setSelectedRaces([]);
             setSelectedTypes([]);
             setSearch("");
+            setCurrentPage(1);
           }}
         />
 

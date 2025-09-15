@@ -1,77 +1,46 @@
-/* RESPONSIVIDADE */
 
-/* Mobile até 768px */
+/* ===========================
+   RESPONSIVIDADE
+=========================== */
 @media (max-width: 768px) {
-  .content {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    display: none;
+  .filters {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 70%;
+    left: -100%;
+    width: 80%;
     height: 100vh;
-    background: #ffffff;
-    z-index: 8000;
+    background: #fff;
+    z-index: 1000;
     padding: 20px;
     overflow-y: auto;
+    transition: left 0.3s ease;
   }
 
-  .sidebar.active {
+  .filters.open {
+    left: 0; /* quando abrir */
+  }
+
+  /* botão de abrir filtros */
+  .filters-toggle {
     display: block;
-  }
-
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .banner img {
-    max-height: 150px;
-  }
-
-  .footer {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #34AC40;
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 1100;
   }
 }
 
-/* Desktop 1366px */
-@media (max-width: 1366px) {
-  .cards {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .sidebar {
-    width: 280px;
-  }
-
-  .banner img {
-    max-height: 220px;
-  }
-}
-
-/* Desktop 1920px */
-@media (min-width: 1601px) {
-  .cards {
-    grid-template-columns: repeat(5, 1fr);
-  }
-
-  .sidebar {
-    width: 316px;
-  }
-
-  .banner img {
-    max-height: 280px;
-  }
-
-  .card-img {
-    height: 300px;
-  }
-
-  .footer {
-    font-size: 1.1rem;
+/* No desktop o botão não aparece */
+@media (min-width: 769px) {
+  .filters-toggle {
+    display: none;
   }
 }
