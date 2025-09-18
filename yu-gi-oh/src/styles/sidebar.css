@@ -70,33 +70,38 @@
 /* ===== Botões ===== */
 .filter-buttons {
   display: flex;
-  flex-direction: row; /* garante que é lado a lado */
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
+  flex-direction: row; /* lado a lado */
+  gap: 10px; /* espaço entre os botões */
 }
+
 .filter-buttons button {
-  flex: 1;
-  background: #16a34a;
-  color: white;
-  border: none;
-  padding: 12px 10px;
-  cursor: pointer;
+  flex: 1; /* garante largura igual para todos os botões */
+  padding: 12px 0; /* altura uniforme */
   font-size: 15px;
   font-family: "Inter", sans-serif;
   font-weight: 700;
+  border: none;
   border-radius: 4px;
+  cursor: pointer;
   transition: 0.2s;
 }
 
-.filter-buttons button:hover {
-  background: #34AC40;
+/* botão Pesquisar */
+.filter-buttons button:first-child {
+  background: #16a34a; /* verde */
+  color: white;
 }
 
+.filter-buttons button:first-child:hover {
+  background: #34AC40; /* hover verde */
+}
+
+/* botão Limpar Filtros */
 .filter-buttons button:last-child {
-  background: #f97316;
+  background: #f97316; /* laranja */
+  color: white;
 }
 
 .filter-buttons button:last-child:hover {
-  background: #fb923c;
+  background: #fb923c; /* hover laranja */
 }

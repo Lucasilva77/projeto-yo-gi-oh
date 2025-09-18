@@ -1,20 +1,15 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
-// cria contexto
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
 
-  // carregar itens do localStorage quando o app iniciar
   useEffect(() => {
     const saved = localStorage.getItem("cart");
-    if (saved) {
-      setCart(JSON.parse(saved));
-    }
+    if (saved) setCart(JSON.parse(saved));
   }, []);
 
-  // salvar itens sempre que o carrinho mudar
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
@@ -31,10 +26,7 @@ export function CartProvider({ children }) {
     });
   };
 
-  const removeFromCart = (id) => {
-    setCart((prev) => prev.filter((c) => c.id !== id));
-  };
-
+  const removeFromCart = (id) => setCart((prev) => prev.filter((c) => c.id !== id));
   const clearCart = () => setCart([]);
 
   return (
@@ -44,7 +36,6 @@ export function CartProvider({ children }) {
   );
 }
 
-// hook para usar o carrinho em qualquer componente
 export function useCart() {
   return useContext(CartContext);
 }

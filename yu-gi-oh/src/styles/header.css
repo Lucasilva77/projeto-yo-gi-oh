@@ -50,9 +50,35 @@
   height: 26px;
 }
 
-.cart {
-  font-size: 40px;
-  background: transparent;
+.header-buttons .cart-button {
+  background-color: #131A0A; /* mesma cor do header */
   border: none;
+  border-radius: 6px;
+  padding: 6px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; /* necessário para posicionar a bolinha */
+  transition: 0.2s;
+}
+
+.header-buttons .cart-button:hover {
+  background-color: #17200c; /* hover um pouco mais claro */
+}
+
+.header-buttons .cart-count {
+  position: absolute;
+  top: 25px;
+  right: 30px;
+  background-color: #ff8800; /* laranja */
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  width: 17px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

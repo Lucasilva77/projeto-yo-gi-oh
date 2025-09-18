@@ -3,7 +3,7 @@
   width: 100%;
   max-height: 250px;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 2px;
   margin-bottom: 20px;
 }
 
@@ -50,26 +50,6 @@
   background: #ffcc00;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .banner-carousel {
-    max-height: 180px;
-  }
-
-  .banner-slide {
-    height: 180px;
-  }
-}
-
-@media (max-width: 480px) {
-  .banner-carousel {
-    max-height: 150px;
-  }
-
-  .banner-slide {
-    height: 150px;
-  }
-}
 .banner-indicators .indicator {
   width: 12px;
   height: 12px;

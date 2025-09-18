@@ -1,12 +1,13 @@
 import logo from "../assets/logo.png";
-import cartIcon from "../assets/cart.png"; // seu carrinho PNG
+import cartIcon from "../assets/cart.png";
 
 export default function Header({
   search,
   setSearch,
-  onSearch,
+  onSearch,       // função que será chamada ao clicar no botão
   onToggleTheme,
   theme,
+  cartCount,
 }) {
   return (
     <header className="header flex items-center justify-between px-6 py-3 bg-[#1c1c1c] text-white">
@@ -14,18 +15,18 @@ export default function Header({
       <div className="logo-container">
         <img src={logo} alt="FPR Logo" className="logo-img h-12" />
       </div>
-      
+
       {/* Barra de pesquisa */}
       <div className="search-bar relative w-80">
         <input
           type="text"
           placeholder="Pesquisar"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)} // atualiza apenas o estado
           className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
         />
         <button
-          onClick={onSearch}
+          onClick={onSearch} // busca só ao clicar
           className="absolute right-2 top-1/2 -translate-y-1/2 text-green-600 hover:text-green-800"
         >
           <svg
@@ -42,18 +43,17 @@ export default function Header({
 
       {/* Botões à direita */}
       <div className="header-buttons flex items-center gap-4">
-        {/* Carrinho */}
-        <button className="cart flex items-center justify-center w-[50px] h-[50px] rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 shadow-md hover:scale-110 transition-transform">
-          <img src={cartIcon} alt="Carrinho" className="w-6 h-6" />
-        </button>
+        <div className="relative">
+          <button className="cart-button">
+            <img src={cartIcon} alt="Carrinho" className="w-6 h-6" />
+          </button>
 
-        {/* Trocar tema */}
-        <button
-          onClick={onToggleTheme}
-          className="theme-toggle flex items-center justify-center w-[50px] h-[50px] rounded-full bg-gradient-to-r from-blue-400 to-indigo-600 shadow-md hover:scale-110 transition-transform"
-        >
-          {theme === "light" ? "🌙" : "☀️"}
-        </button>
+          {cartCount > 0 && (
+            <span className="cart-count absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-2 py-0.5">
+              {cartCount}
+            </span>
+          )}
+        </div>
       </div>
     </header>
   );

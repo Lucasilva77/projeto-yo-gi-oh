@@ -1,7 +1,6 @@
-import { useCart } from "../context/CartContext";
 
 export default function Cart() {
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, addToCart, removeFromCart, clearCart } = useCart();
 
   if (cart.length === 0) {
     return (
@@ -21,7 +20,8 @@ export default function Cart() {
             className="flex justify-between items-center border-b pb-2"
           >
             <span>
-              {item.name} <span className="text-sm text-gray-500">x{item.qty}</span>
+              {item.name}{" "}
+              <span className="text-sm text-gray-500">x{item.qty}</span>
             </span>
             <button
               onClick={() => removeFromCart(item.id)}

@@ -1,13 +1,37 @@
-/* FOOTER */
 .footer {
-  background: #131A0A;
-  color: #fff;
-  padding: 15px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between; /* texto à esquerda, imagem à direita */
+  padding: 30px 40px;
+  background-color: #131A0A;
+  color: white;
+  position: relative; /* referência para a imagem */
+  min-height: 120px; /* garante altura suficiente para o abacaxi */
 }
 
-.footer-logo {
-  height: 40px;
+.footer p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer-image {
+  position: absolute;
+  width: 179px;
+  height: 119px;
+  top: -83px;  /* mantém a altura que você quer */
+  right: 0;    /* fixa na direita do footer */
+}
+
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer-image {
+    position: relative;
+    top: 0;
+    left: 0;
+  }
 }

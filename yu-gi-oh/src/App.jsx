@@ -1,10 +1,14 @@
-import abacaxi from "./assets/abacaxi.png";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import CardGrid from "./components/CardGrid";
 import Banner from "./components/Banner";
+import Footer from "./components/Footer";
+
+import { useCart } from "./components/CartContext";
+
 import "./styles/reset.css";
 import "./styles/layout.css";
 import "./styles/header.css";
@@ -16,31 +20,24 @@ import "./styles/pagination.css";
 import "./styles/responsive.css";
 import "./styles/Banner.css";
 
-export default function App() {
-  const [offset, setOffset] = useState(0);
+export default function MainPage() {
   const [allCards, setAllCards] = useState([]);
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // carrinho
-  const [cart, setCart] = useState([]);
-
-  const addToCart = (card) => setCart((prev) => [...prev, card]);
-  const removeFromCart = (id) =>
-    setCart((prev) => prev.filter((c) => c.id !== id));
-
-  // filtros
+  const [search, setSearch] = useState("");
   const [selectedRaces, setSelectedRaces] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedArchetypes, setSelectedArchetypes] = useState([]);
+  const [selectedAttributes, setSelectedAttributes] = useState([]);
 
-  // paginação (front)
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // tema
   const [theme, setTheme] = useState("light");
   const toggleTheme = () =>
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
+
+  const { cart, addToCart, removeFromCart } = useCart();
 
   const toggleRace = (race) =>
     setSelectedRaces((prev) =>
@@ -52,58 +49,77 @@ export default function App() {
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
 
-  // buscar cartas
+  const toggleArchetype = (arch) =>
+    setSelectedArchetypes((prev) =>
+      prev.includes(arch) ? prev.filter((a) => a !== arch) : [...prev, arch]
+    );
+
+  const toggleAttribute = (attr) =>
+    setSelectedAttributes((prev) =>
+      prev.includes(attr) ? prev.filter((a) => a !== attr) : [...prev, attr]
+    );
+
+  const buildUrl = () => {
+    const baseUrl = "https://db.ygoprodeck.com/api/v7/cardinfo.php";
+    const params = [];
+    if (search) params.push(`fname=${encodeURIComponent(search)}`);
+    if (selectedRaces.length > 0)
+      params.push(`race=${encodeURIComponent(selectedRaces[0])}`);
+    if (selectedTypes.length > 0)
+      params.push(`type=${encodeURIComponent(selectedTypes[0])}`);
+    if (selectedArchetypes.length > 0)
+      params.push(`archetype=${encodeURIComponent(selectedArchetypes[0])}`);
+    if (selectedAttributes.length > 0)
+      params.push(`attribute=${encodeURIComponent(selectedAttributes[0])}`);
+    return `${baseUrl}?${params.join("&")}`;
+  };
+
   const fetchCards = async () => {
     setLoading(true);
     try {
-      const url = `https://db.ygoprodeck.com/api/v7/cardinfo.php?attribute=water&type=Link%20Monster&num=10&offset=${offset}`;
-      const res = await axios.get(url);
-      setAllCards(res.data.data);
-    } catch (err) {
-      console.error("Erro ao buscar cartas:", err);
+      const res = await axios.get(buildUrl());
+      setAllCards(res.data.data || []);
+      setCurrentPage(1);
+    } catch {
       setAllCards([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // sempre buscar quando offset mudar
+  // Busca automática apenas quando filtros mudam, não ao digitar
   useEffect(() => {
     fetchCards();
-  }, [offset]);
+  }, [selectedRaces, selectedTypes, selectedArchetypes, selectedAttributes]);
 
-  // aplicar filtros no front
-  const applyFilters = () => {
-    let filtered = [...allCards];
+  const totalPages = Math.ceil(allCards.length / itemsPerPage);
+  const paginatedCards = allCards.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
-    if (search) {
-      filtered = filtered.filter((card) =>
-        card.name.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    if (selectedRaces.length > 0) {
-      filtered = filtered.filter((card) => selectedRaces.includes(card.race));
-    }
-
-    if (selectedTypes.length > 0) {
-      filtered = filtered.filter((card) => selectedTypes.includes(card.type));
-    }
-
-    return filtered;
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
-  const filteredCards = applyFilters();
-  const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    document.body.className = theme;
+  }, [theme]);
 
   return (
     <div className={`app ${theme}`}>
       <Header
         search={search}
         setSearch={setSearch}
-        onSearch={applyFilters}
+        onSearch={fetchCards} // busca só ao clicar
         onToggleTheme={toggleTheme}
         theme={theme}
+        cartCount={cart.length}
       />
 
       <div className="content">
@@ -112,65 +128,73 @@ export default function App() {
           toggleRace={toggleRace}
           selectedTypes={selectedTypes}
           toggleType={toggleType}
-          onSearch={applyFilters}
+          selectedArchetypes={selectedArchetypes}
+          toggleArchetype={toggleArchetype}
+          selectedAttributes={selectedAttributes}
+          toggleAttribute={toggleAttribute}
+          onSearch={() => fetchCards()}
           onClear={() => {
             setSelectedRaces([]);
             setSelectedTypes([]);
+            setSelectedArchetypes([]);
+            setSelectedAttributes([]);
             setSearch("");
-            setCurrentPage(1);
+            fetchCards();
           }}
         />
-
         <main className="main">
-          {/* Banner rotativo */}
           <Banner />
-
-          {/* Controles embaixo do banner */}
           <div className="controls">
             <div className="items-per-page">
-              <select
-                value={itemsPerPage}
-                onChange={(e) => {
-                  setItemsPerPage(Number(e.target.value));
-                  setCurrentPage(1);
-                }}
-              >
+              <select value={itemsPerPage} onChange={handleItemsPerPageChange}>
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={30}>30</option>
               </select>
-              <span>itens por página</span>
+              <span>Itens por página:</span>
             </div>
 
             <div className="pagination">
               <button
-                onClick={() => setOffset((o) => Math.max(o - 10, 0))}
-                disabled={offset === 0}
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
               >
                 &lt;
               </button>
-              <button onClick={() => setOffset((o) => o + 10)}>&gt;</button>
+
+              {(() => {
+                const maxButtons = 5;
+                let startPage = Math.max(currentPage - 2, 1);
+                let endPage = Math.min(startPage + maxButtons - 1, totalPages);
+                startPage = Math.max(endPage - maxButtons + 1, 1);
+
+                const buttons = [];
+                for (let i = startPage; i <= endPage; i++) {
+                  buttons.push(
+                    <button
+                      key={i}
+                      className={i === currentPage ? "active" : ""}
+                      onClick={() => handlePageChange(i)}
+                    >
+                      {i}
+                    </button>
+                  );
+                }
+                return buttons;
+              })()}
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages || totalPages === 0}
+              >
+                &gt;
+              </button>
             </div>
           </div>
-
-          {/* Grid de cards */}
-          <CardGrid
-            cards={filteredCards.slice(
-              (currentPage - 1) * itemsPerPage,
-              currentPage * itemsPerPage
-            )}
-            loading={loading}
-            addToCart={addToCart}
-          />
+          <CardGrid cards={paginatedCards} loading={loading} />
         </main>
       </div>
-
-      <footer className="footer">
-        <div className="footer-content">
-          © 2023 FPR Animes - Todos os direitos reservados.
-        </div>
-        <img src={abacaxi} alt="Mascote FPR" className="footer-logo" />
-      </footer>
+      <Footer cart={cart} removeFromCart={removeFromCart} />
     </div>
   );
 }
